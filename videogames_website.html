@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameZone - Portal de Videojuegos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Geometric floating shapes */
+        .geometric-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+        }
+
+        .shape.circle {
+            border-radius: 50%;
+            background: linear-gradient(45deg, #fff, transparent);
+            animation: floatRotate 20s infinite linear;
+        }
+
+        .shape.triangle {
+            width: 0;
+            height: 0;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-bottom: 50px solid rgba(255,255,255,0.1);
+            animation: floatRotate 25s infinite linear reverse;
+        }
+
+        .shape.square {
+            background: linear-gradient(45deg, rgba(255,255,255,0.1), transparent);
+            animation: floatBounce 15s infinite ease-in-out;
+        }
+
+        @keyframes floatRotate {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+
+        @keyframes floatBounce {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(180deg); }
+        }
+
+        /* Header with advanced animations */
+        .header {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .header.scrolled {
+            padding: 0.5rem 0;
+            background: rgba(0, 0, 0, 0.95);
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: logoGradient 3s ease infinite, logoFloat 2s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(255, 107, 107, 0.5);
+        }
+
+        @keyframes logoGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-5px) scale(1.05); }
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-links a:hover::before {
+            left: 100%;
+        }
+
+        .nav-links a:hover {
+            background: linear-gradient(45deg, rgba(255,107,107,0.3), rgba(78,205,196,0.3));
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Enhanced Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: 6rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.1); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(255,255,255,0.5);
+            animation: heroTitleIn 2s ease-out, textGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes heroTitleIn {
+            0% {
+                opacity: 0;
+                transform: translateY(50px) scale(0.8);
+                filter: blur(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes textGlow {
+            0%, 100% { text-shadow: 0 0 20px rgba(255,255,255,0.5); }
+            50% { text-shadow: 0 0 30px rgba(255,255,255,0.8), 0 0 40px rgba(78,205,196,0.5); }
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: heroSubtitleIn 2s ease-out 0.5s both;
+        }
+
+        @keyframes heroSubtitleIn {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+                filter: blur(5px);
+            }
+            100% {
+                opacity: 0.9;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24, #ff6b6b);
+            background-size: 200% 200%;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            animation: heroButtonIn 2s ease-out 1s both, buttonGlow 2s ease-in-out infinite;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+        }
+
+        @keyframes heroButtonIn {
+            0% {
+                opacity: 0;
+                transform: translateY(30px) scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes buttonGlow {
+            0%, 100% { box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4); }
+            50% { box-shadow: 0 15px 40px rgba(255, 107, 107, 0.6); }
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            background-position: 100% 0;
+            box-shadow: 0 20px 50px rgba(255, 107, 107, 0.6);
+        }
+
+        /* Enhanced Content Sections */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section {
+            padding: 5rem 0;
+            position: relative;
+        }
+
+        .section h2 {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 4rem;
+            position: relative;
+            animation: sectionTitleIn 1s ease-out;
+        }
+
+        @keyframes sectionTitleIn {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4ecdc4, #44a08d, #4ecdc4);
+            animation: underlineExpand 1.5s ease-out 0.5s both;
+        }
+
+        @keyframes underlineExpand {
+            0% { width: 0; }
+            100% { width: 100px; }
+        }
+
+        /* Advanced Games Grid */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .game-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: cardSlideIn 0.8s ease-out both;
+        }
+
+        @keyframes cardSlideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(50px) rotateX(30deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) rotateX(0);
+            }
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .game-card:hover::before {
+            opacity: 1;
+        }
+
+        .game-card:hover {
+            transform: translateY(-15px) rotateY(5deg);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+            border-color: rgba(78, 205, 196, 0.5);
+        }
+
+        .game-image {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb);
+            background-size: 400% 400%;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+            animation: imageGradient 5s ease infinite;
+        }
+
+        @keyframes imageGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .game-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            50% { left: 100%; }
+            100% { left: 100%; }
+        }
+
+        .game-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            transition: color 0.3s ease;
+        }
+
+        .game-card:hover h3 {
+            color: #4ecdc4;
+        }
+
+        .game-card p {
+            opacity: 0.8;
+            line-height: 1.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .game-card:hover p {
+            opacity: 1;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .game-card:hover .rating {
+            transform: scale(1.1);
+        }
+
+        .stars {
+            color: #ffd700;
+            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
+            animation: starTwinkle 2s ease-in-out infinite;
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Enhanced News Section */
+        .news-section {
+            background: rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .news-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" patternUnits="userSpaceOnUse" width="10" height="10"><circle cx="5" cy="5" r="1" fill="%23fff" opacity="0.1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23dots)"/></svg>');
+            animation: dotsMove 20s linear infinite;
+        }
+
+        @keyframes dotsMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 100px 100px; }
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 2.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .news-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: newsCardIn 1s ease-out both;
+        }
+
+        @keyframes newsCardIn {
+            0% {
+                opacity: 0;
+                transform: translateX(-50px) rotateY(-30deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0) rotateY(0);
+            }
+        }
+
+        .news-card:hover {
+            transform: scale(1.05) rotateZ(1deg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .news-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24, #feca57);
+            background-size: 300% 300%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            position: relative;
+            animation: newsImageGradient 4s ease infinite;
+        }
+
+        @keyframes newsImageGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .news-content {
+            padding: 2rem;
+        }
+
+        .news-date {
+            color: #4ecdc4;
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Enhanced Footer */
+        .footer {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 4rem 0 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ff6b6b);
+            background-size: 400% 400%;
+            animation: footerLine 3s ease infinite;
+        }
+
+        @keyframes footerLine {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1.5rem;
+            color: #4ecdc4;
+            font-size: 1.3rem;
+            position: relative;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background: #4ecdc4;
+        }
+
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.8rem;
+            transition: all 0.3s ease;
+            padding: 0.3rem 0;
+        }
+
+        .footer-section a:hover {
+            color: #4ecdc4;
+            transform: translateX(5px);
+            text-shadow: 0 0 10px rgba(78, 205, 196, 0.5);
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .social-icons a {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-icons a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .social-icons a:hover::before {
+            opacity: 1;
+        }
+
+        .social-icons a:hover {
+            transform: scale(1.2) rotateZ(10deg);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeOut 1s ease 2s both;
+        }
+
+        .loading-spinner {
+            width: 80px;
+            height: 80px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; visibility: visible; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+
+    <!-- Geometric Shapes -->
+    <div class="geometric-shapes">
+        <div class="shape circle" style="width: 60px; height: 60px; top: 20%; left: 10%; animation-delay: 0s;"></div>
+        <div class="shape triangle" style="top: 60%; left: 80%; animation-delay: 3s;"></div>
+        <div class="shape square" style="width: 40px; height: 40px; top: 80%; left: 20%; animation-delay: 6s;"></div>
+        <div class="shape circle" style="width: 80px; height: 80px; top: 40%; left: 70%; animation-delay: 9s;"></div>
+        <div class="shape triangle" style="top: 10%; left: 60%; animation-delay: 12s;"></div>
+        <div class="shape square" style="width: 50px; height: 50px; top: 70%; left: 40%; animation-delay: 15s;"></div>
+    </div>
+
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">GameZone</div>
+            <ul class="nav-links">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#juegos">Juegos</a></li>
+                <li><a href="#noticias">Noticias</a></li>
+                <li><a href="#reseñas">Reseñas</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero" id="inicio">
+        <div class="hero-content">
+            <div class="container">
+                <h1>Bienvenido a GameZone</h1>
+                <p>Tu portal definitivo para las últimas noticias, reseñas y novedades del mundo de los videojuegos</p>
+                <a href="#juegos" class="cta-button">Explorar Juegos</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="juegos">
+        <div class="container">
+            <h2>Juegos Destacados</h2>
+            <div class="games-grid">
+                <div class="game-card" onclick="showGameInfo('Cyberpunk 2077')" style="animation-delay: 0.1s;">
+                    <div class="game-image">🌃</div>
+                    <h3>Cyberpunk 2077</h3>
+                    <p>Sumérgete en Night City, un mundo futurista lleno de aventuras cyberpunk y decisiones que cambiarán tu destino.</p>
+                    <div class="rating">
+                        <span class="stars">⭐⭐⭐⭐⭐</span>
+                        <span>9.2/10</span>
+                    </div>
+                </div>
+
+                <div class="game-card" onclick="showGameInfo('The Witcher 3')" style="animation-delay: 0.2s;">
+                    <div class="game-image">⚔️</div>
+                    <h3>The Witcher 3</h3>
+                    <p>Embárcate en una épica aventura como Geralt de Rivia en este RPG aclamado mundialmente.</p>
+                    <div class="rating">
+                        <span class="stars">⭐⭐⭐⭐⭐</span>
+                        <span>9.5/10</span>
+                    </div>
+                </div>
+
+                <div class="game-card" onclick="showGameInfo('Forza Horizon 5')" style="animation-delay: 0.3s;">
+                    <div class="game-image">🏎️</div>
+                    <h3>Forza Horizon 5</h3>
+                    <p>Corre a través de México en el simulador de carreras más espectacular y realista jamás creado.</p>
+                    <div class="rating">
+                        <span class="stars">⭐⭐⭐⭐⭐</span>
+                        <span>9.0/10</span>
+                    </div>
+                </div>
+
+                <div class="game-card" onclick="showGameInfo('Elden Ring')" style="animation-delay: 0.4s;">
+                    <div class="game-image">🏰</div>
+                    <h3>Elden Ring</h3>
+                    <p>Explora las Tierras Intermedias en esta obra maestra de FromSoftware y George R.R. Martin.</p>
+                    <div class="rating">
+                        <span class="stars">⭐⭐⭐⭐⭐</span>
+                        <span>9.8/10</span>
+                    </div>
+                </div>
+
+                <div class="game-card" onclick="showGameInfo('Spider-Man: Miles Morales')" style="animation-delay: 0.5s;">
+                    <div class="game-image">🕷️</div>
+                    <h3>Spider-Man: Miles Morales</h3>
+                    <p>Balancea por Nueva York como el nuevo Spider-Man en esta increíble aventura llena de acción.</p>
+                    <div class="rating">
+                        <span class="stars">⭐⭐⭐⭐⭐</span>
+                        <span>8.8/10</span>
+                    </div>
+                </div>
+
+                <div class="game-card" onclick="showGameInfo('God of War')" style="animation-delay: 0.6s;">
+                    <div class="game-image">⚡</div>
+                    <h3>God of War</h3>
+                    <p>Acompaña a Kratos y Atreus en su emotivo viaje por los reinos nórdicos.</p>
+                    <div class="rating">
+                        <span class="stars">⭐⭐⭐⭐⭐</span>
+                        <span>9.7/10</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section news-section" id="noticias">
+        <div class="container">
+            <h2>Últimas Noticias</h2>
+            <div class="news-grid">
+                <div class="news-card" style="animation-delay: 0.1s;">
+                    <div class="news-image">📰</div>
+                    <div class="news-content">
+                        <div class="news-date">15 Agosto 2025</div>
+                        <h3>
